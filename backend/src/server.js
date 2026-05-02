@@ -10,9 +10,9 @@ const startServer = async () => {
   await connectDB();
 
   app.listen(PORT, () => {
-    console.log(`\n🚀 SlotIQ Server running on port ${PORT}`);
-    console.log(`📡 API: http://localhost:${PORT}/api`);
-    console.log(`💚 Health: http://localhost:${PORT}/api/health`);
+    console.log(`\n SlotIQ Server running on port ${PORT}`);
+    console.log(` API: http://localhost:${PORT}/api`);
+    console.log(` Health: http://localhost:${PORT}/api/health`);
   });
 };
 
