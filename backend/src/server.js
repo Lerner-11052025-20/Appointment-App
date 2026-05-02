@@ -11,8 +11,8 @@ const startServer = async () => {
 
   app.listen(PORT, () => {
     console.log(`\n🚀 SlotIQ Server running on port ${PORT}`);
-    console.log(`📡 API: http:
-    console.log(`💚 Health: http:
+    console.log(`📡 API: http://localhost:${PORT}/api`);
+    console.log(`💚 Health: http://localhost:${PORT}/api/health`);
   });
 };
 
