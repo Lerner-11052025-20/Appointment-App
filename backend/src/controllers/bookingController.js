@@ -237,6 +237,29 @@ exports.rescheduleBooking = async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'Cannot reschedule this booking.' });
     }
 
+
+
+
+
+
+
+
+    if (booking.rescheduleHistory && booking.rescheduleHistory.length >= 1) {
+      return res.status(400).json({ success: false, message: 'You can only reschedule an appointment once.' });
+    }
+
+    const currentAppointmentTime = new Date(`${booking.bookingDate}T${booking.startTime}`);
+    const hoursUntil = (currentAppointmentTime - new Date()) / (1000 * 60 * 60);
+    if (hoursUntil < 24) {
+      return res.status(400).json({ success: false, message: 'Rescheduling is not allowed within 24 hours of the appointment.' });
+    }
+
+
+
+
+
+
+    
     const newSlotQuery = {
       appointment: booking.appointment,
       date: newDate,

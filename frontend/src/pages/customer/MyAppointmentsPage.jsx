@@ -73,6 +73,23 @@ export default function MyAppointmentsPage() {
               const isPast = new Date(b.bookingDate) < new Date(new Date().setHours(0,0,0,0));
               const isActive = b.status === 'confirmed' || b.status === 'pending';
 
+
+
+
+
+
+
+
+              const appointmentDateTime = new Date(`${b.bookingDate}T${b.startTime}`);
+              const hoursUntil = (appointmentDateTime - new Date()) / (1000 * 60 * 60);
+              const hasRescheduled = b.rescheduleHistory && b.rescheduleHistory.length >= 1;
+              const isWithin24Hours = hoursUntil < 24;
+
+
+
+
+
+
               return (
                 <div key={b._id} className="bg-white border border-slate-200 rounded-2xl p-4 md:p-5 shadow-sm flex flex-col md:flex-row md:items-center gap-5 transition-colors hover:border-slate-300">
 
@@ -106,7 +123,13 @@ export default function MyAppointmentsPage() {
                       <>
                         <button
                           onClick={() => navigate(`/customer/bookings/${b._id}/reschedule`)}
-                          className="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 bg-slate-50 border border-slate-200 hover:bg-slate-100 hover:text-slate-800 transition-colors"
+                          disabled={hasRescheduled || isWithin24Hours}
+                          title={hasRescheduled ? 'You can only reschedule once.' : isWithin24Hours ? 'Cannot reschedule within 24 hours of appointment.' : ''}
+                          className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors ${
+                            hasRescheduled || isWithin24Hours
+                              ? 'text-slate-400 bg-slate-50 border-slate-100 cursor-not-allowed opacity-70'
+                              : 'text-slate-600 bg-slate-50 border-slate-200 hover:bg-slate-100 hover:text-slate-800'
+                          }`}
                         >Reschedule</button>
                         <button
                           onClick={() => setCancelTarget(b)}
