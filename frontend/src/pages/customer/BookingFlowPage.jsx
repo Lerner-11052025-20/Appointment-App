@@ -203,6 +203,7 @@ export default function BookingFlowPage() {
                   className="w-full bg-slate-50 border border-slate-200 text-slate-800 font-medium p-4 rounded-xl outline-none focus:border-brand-500 transition-colors"
                 />
               </div>
+              
             )}
 
             {step === 4 && (

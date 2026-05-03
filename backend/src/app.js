@@ -41,6 +41,8 @@ app.use('/api/availability', require('./routes/availabilityRoutes'));
 app.use('/api/bookings', require('./routes/bookingRoutes'));
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/profile', profileRoutes);
+app.use('/api/admin', require('./routes/adminRoutes'));
+app.use('/api/reports', require('./routes/reportRoutes'));
 
 app.use(notFound);
 app.use(errorHandler);

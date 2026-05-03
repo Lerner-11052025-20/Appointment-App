@@ -80,6 +80,9 @@ export default function OrganiserDashboard() {
             <a href="/organiser/resources" className="flex-1 text-center py-3.5 rounded-2xl bg-white border border-slate-200 text-slate-700 font-bold shadow-sm hover:bg-slate-50 hover:-translate-y-0.5 active:scale-[0.98] transition-all">
               🏢 Manage Resources
             </a>
+            <a href="/organiser/reports" className="flex-1 text-center py-3.5 rounded-2xl bg-white border border-slate-200 text-slate-700 font-bold shadow-sm hover:bg-slate-50 hover:-translate-y-0.5 active:scale-[0.98] transition-all">
+              📊 Reports & Insights
+            </a>
           </div>
         </div>
       </div>
