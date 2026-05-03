@@ -38,27 +38,29 @@ export default function LoginForm() {
 
   return (
     <>
-      <div className="glass-card-strong p-8 sm:p-10">
-        {}
-        <div className="lg:hidden flex items-center gap-2.5 mb-6">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center">
-            <svg className="w-4.5 h-4.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <div className="bg-white/90 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-white">
+        {/* Mobile Header */}
+        <div className="lg:hidden flex items-center gap-3 mb-6">
+          <div className="w-8 h-8 rounded-lg bg-violet-600 flex items-center justify-center shadow-lg shadow-violet-500/30">
+            <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
           </div>
-          <span className="text-xl font-bold text-gradient-brand">SlotIQ</span>
+          <span className="text-xl font-extrabold text-violet-700">SlotIQ</span>
         </div>
 
-        <h1 className="text-2xl font-bold text-slate-900 mb-1">Welcome back</h1>
-        <p className="text-sm text-slate-500 mb-7">Sign in to your scheduling cockpit</p>
+        <div className="mb-6">
+          <h1 className="text-2xl font-extrabold text-slate-900 mb-1 tracking-tight">Welcome back</h1>
+          <p className="text-xs font-medium text-slate-500">Sign in to your scheduling cockpit</p>
+        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <Input
             id="login-email"
-            label="Email"
+            label="Email Address"
             type="email"
             name="email"
-            placeholder="you@example.com"
+            placeholder="name@company.com"
             value={form.email}
             onChange={handleChange}
             error={errors.email}
@@ -69,31 +71,35 @@ export default function LoginForm() {
             label="Password"
             type="password"
             name="password"
-            placeholder="Enter your password"
+            placeholder="••••••••"
             value={form.password}
             onChange={handleChange}
             error={errors.password}
             autoComplete="current-password"
           />
 
-          <div className="flex items-center justify-end">
+          <div className="flex items-center justify-between pt-1">
+            <label className="flex items-center gap-1.5 cursor-pointer group">
+              <input type="checkbox" className="w-3.5 h-3.5 rounded border-slate-300 text-violet-600 focus:ring-violet-500 cursor-pointer" />
+              <span className="text-[11px] font-medium text-slate-500 group-hover:text-slate-700 transition-colors">Remember me</span>
+            </label>
             <button
               type="button"
               onClick={() => setShowForgot(true)}
-              className="text-xs font-semibold text-brand-600 hover:text-brand-700 transition-colors"
+              className="text-[11px] font-bold text-violet-600 hover:text-violet-700 transition-colors"
             >
               Forgot password?
             </button>
           </div>
 
-          <Button type="submit" loading={loading}>
-            Sign In
+          <Button type="submit" loading={loading} className="!mt-6 !py-2.5 !text-sm shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40">
+            Sign In to Dashboard
           </Button>
         </form>
 
-        <p className="text-center text-sm text-slate-500 mt-6">
+        <p className="text-center text-[11px] font-medium text-slate-500 mt-6">
           Don&apos;t have an account?{' '}
-          <Link to="/signup" className="font-semibold text-brand-600 hover:text-brand-700 transition-colors">
+          <Link to="/signup" className="font-bold text-violet-600 hover:text-violet-700 transition-colors">
             Create account
           </Link>
         </p>
