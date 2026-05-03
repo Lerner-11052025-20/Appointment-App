@@ -33,24 +33,22 @@ export default function RoleSelector({ value, onChange }) {
               key={role.id}
               type="button"
               onClick={() => onChange(role.id)}
-              className={`relative overflow-hidden group rounded-xl p-3 text-left transition-all duration-300 flex items-center gap-3 ${
-                isSelected
+              className={`relative overflow-hidden group rounded-xl p-3 text-left transition-all duration-300 flex items-center gap-3 ${isSelected
                   ? 'bg-violet-50 border-2 border-violet-500 shadow-md scale-[1.02]'
                   : 'bg-slate-50 border-2 border-transparent hover:border-violet-200 hover:bg-violet-50/50'
-              }`}
+                }`}
             >
-              <div className={`w-8 h-8 rounded-lg shrink-0 flex items-center justify-center transition-colors ${
-                isSelected
+              <div className={`w-8 h-8 rounded-lg shrink-0 flex items-center justify-center transition-colors ${isSelected
                   ? 'bg-violet-600 text-white shadow-lg shadow-violet-500/30'
                   : 'bg-white text-slate-400 shadow-sm group-hover:text-violet-500'
-              }`}>
+                }`}>
                 <div className="scale-75">{role.icon}</div>
               </div>
               <div className="min-w-0">
                 <p className={`text-xs font-bold truncate transition-colors ${isSelected ? 'text-violet-900' : 'text-slate-700'}`}>{role.label}</p>
                 <p className={`text-[9px] truncate mt-0.5 font-medium transition-colors ${isSelected ? 'text-violet-600/80' : 'text-slate-500'}`}>{role.desc}</p>
               </div>
-              
+
               {isSelected && (
                 <div className="absolute top-1.5 right-1.5 text-violet-600">
                   <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
