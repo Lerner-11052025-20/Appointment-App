@@ -35,12 +35,20 @@ export default function BookingFlowPage() {
       .finally(() => setLoading(false));
   }, [appointmentId]);
 
+
+
+
+
   useEffect(() => {
-    if (step === 4 && state.date) {
+    if (step === 3 && state.date) {
       fetchAvailability();
     }
   }, [step, state.date, state.providerUser, state.resource]);
 
+
+
+
+  
   const fetchAvailability = async () => {
     setSlotsLoading(true);
     try {
@@ -82,7 +90,7 @@ export default function BookingFlowPage() {
     } catch (err) {
       showToast(err.response?.data?.message || 'Failed to book slot', 'error');
 
-      if (err.response?.status === 409) setStep(4);
+      if (err.response?.status === 409) setStep(3);
     } finally {
       setSubmitting(false);
     }
@@ -94,7 +102,7 @@ export default function BookingFlowPage() {
   const steps = [
     { num: 1, label: 'Overview' },
     { num: 2, label: 'Provider' },
-    { num: 3, label: 'Date' },
+    { num: 3, label: 'Date & Time' },
     { num: 4, label: 'Time' },
     { num: 5, label: 'Capacity' },
     { num: 6, label: 'Questions' },
@@ -108,6 +116,7 @@ export default function BookingFlowPage() {
       const arr = type === 'resource' ? appointment.assignedResources : appointment.assignedUsers;
       if (!arr || arr.length === 0 || appointment.assignmentMode === 'automatic') return true;
     }
+    if (targetStep === 4) return true; // Step 4 (Time) is now merged into Step 3
     if (targetStep === 5 && !appointment.capacity?.manageCapacity) return true;
     if (targetStep === 6 && (!appointment.questions || appointment.questions.length === 0)) return true;
     if (targetStep === 7 && !appointment.options?.advancePayment) return true;
@@ -194,48 +203,55 @@ export default function BookingFlowPage() {
 
             {step === 3 && (
               <div className="animate-fade-in-up">
-                <h2 className="text-xl font-bold text-slate-900 mb-4">Select a Date</h2>
-                <input
-                  type="date"
-                  min={new Date().toISOString().split('T')[0]}
-                  value={state.date}
-                  onChange={e => setState({ ...state, date: e.target.value, slot: null })}
-                  className="w-full bg-slate-50 border border-slate-200 text-slate-800 font-medium p-4 rounded-xl outline-none focus:border-brand-500 transition-colors"
-                />
-              </div>
-              
-            )}
+                <div className="mb-8">
+                  <h2 className="text-sm font-bold text-slate-800 mb-2">Select Date</h2>
+                  <input
+                    type="date"
+                    min={new Date().toISOString().split('T')[0]}
+                    value={state.date}
+                    onChange={e => setState({ ...state, date: e.target.value, slot: null })}
+                    className="w-full bg-white border border-slate-200 text-slate-800 font-medium p-3.5 rounded-xl outline-none focus:border-brand-500 transition-colors shadow-sm"
+                  />
+                </div>
 
-            {step === 4 && (
-              <div className="animate-fade-in-up">
-                <h2 className="text-xl font-bold text-slate-900 mb-1">Available Times</h2>
-                <p className="text-sm text-slate-500 mb-6">For {new Date(state.date).toLocaleDateString()}</p>
-
-                {slotsLoading ? (
-                  <div className="grid grid-cols-2 gap-3">
-                    {[1, 2, 3, 4].map(i => <div key={i} className="h-14 bg-slate-100 rounded-xl animate-pulse" />)}
-                  </div>
-                ) : slots.length === 0 ? (
-                  <div className="text-center py-8 bg-slate-50 rounded-xl border border-dashed border-slate-200">
-                    <p className="font-semibold text-slate-600 text-sm">No slots available</p>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-2 gap-3">
-                    {slots.map((s, i) => {
-                      const isFull = s.status === 'full';
-                      const isSel = state.slot?.startTime === s.startTime;
-                      return (
-                        <button
-                          key={i}
-                          disabled={isFull}
-                          onClick={() => setState({ ...state, slot: s, capacity: 1 })}
-                          className={`p-3 rounded-xl border-2 text-center transition-colors ${isFull ? 'bg-slate-50 border-slate-100 opacity-50 cursor-not-allowed' : isSel ? 'border-brand-500 bg-brand-50' : 'border-slate-200 hover:border-brand-300 bg-white'}`}
-                        >
-                          <p className={`font-bold ${isSel ? 'text-brand-700' : isFull ? 'text-slate-400' : 'text-slate-700'}`}>{s.startTime}</p>
-                          <p className={`text-[10px] uppercase font-bold mt-0.5 ${isFull ? 'text-rose-500' : s.label === 'Filling Fast' ? 'text-amber-500' : 'text-emerald-500'}`}>{s.label}</p>
-                        </button>
-                      );
-                    })}
+                {state.date && (
+                  <div className="animate-fade-in-up">
+                    <h2 className="text-sm font-bold text-slate-800 mb-3">Select Time</h2>
+                    {slotsLoading ? (
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        {[1, 2, 3, 4, 5, 6].map(i => <div key={i} className="h-[60px] bg-slate-100 rounded-xl animate-pulse" />)}
+                      </div>
+                    ) : slots.length === 0 ? (
+                      <div className="text-center py-8 bg-slate-50 rounded-xl border border-dashed border-slate-200">
+                        <p className="font-semibold text-slate-600 text-sm">No slots available for this date.</p>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                        {slots.map((s, i) => {
+                          const isFull = s.status === 'full';
+                          const isSel = state.slot?.startTime === s.startTime;
+                          return (
+                            <button
+                              key={i}
+                              disabled={isFull}
+                              onClick={() => setState({ ...state, slot: s, capacity: 1 })}
+                              className={`py-3 px-2 rounded-xl border-2 text-center transition-all ${
+                                isFull 
+                                  ? 'bg-slate-50 border-slate-50 opacity-40 cursor-not-allowed' 
+                                  : isSel 
+                                    ? 'border-brand-300 bg-brand-50 text-brand-700 shadow-sm' 
+                                    : 'border-slate-100 hover:border-slate-300 bg-white text-slate-700'
+                              }`}
+                            >
+                              <p className="font-bold text-[15px]">{s.startTime}</p>
+                              {s.label && !isFull && s.label !== 'Available' && (
+                                <p className={`text-[9px] uppercase font-bold mt-0.5 ${s.label === 'Filling Fast' ? 'text-amber-500' : 'text-emerald-500'}`}>{s.label}</p>
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -405,7 +421,7 @@ export default function BookingFlowPage() {
             {step < 8 ? (
               <button
                 onClick={goNext}
-                disabled={(step === 3 && !state.date) || (step === 4 && !state.slot) || (step === 7 && appointment.options?.advancePayment && !state.paymentMock)}
+                disabled={(step === 3 && (!state.date || !state.slot)) || (step === 7 && appointment.options?.advancePayment && !state.paymentMock)}
                 className="bg-brand-600 hover:bg-brand-700 disabled:opacity-50 disabled:cursor-not-allowed text-white px-8 py-2.5 rounded-xl text-sm font-bold transition-all shadow-lg active:scale-95"
               >
                 {step === 6 && appointment.options?.advancePayment ? 'Proceed to payment' : step === 6 ? 'Confirm Selection' : 'Continue'}
